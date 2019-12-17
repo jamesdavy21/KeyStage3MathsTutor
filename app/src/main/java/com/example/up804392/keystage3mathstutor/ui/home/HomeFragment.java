@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 public class HomeFragment extends Fragment {
 
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -30,7 +29,7 @@ public class HomeFragment extends Fragment {
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (menuItem.getItemId()) {
                 default:
@@ -40,7 +39,7 @@ public class HomeFragment extends Fragment {
                     fragment = new HomeGuideFragment();
                     break;
                 case R.id.navigation_game:
-                    fragment = new HomeGuideFragment();
+                    fragment = new HomeGameFragment();
                     break;
             }
             getChildFragmentManager().popBackStack();
