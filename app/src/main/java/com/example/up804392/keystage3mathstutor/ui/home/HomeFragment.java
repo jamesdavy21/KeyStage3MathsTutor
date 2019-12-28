@@ -19,9 +19,9 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        BottomNavigationView navView = view.findViewById(R.id.nav_bottom_view);
-        navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        navView.setSelectedItemId(R.id.navigation_quiz);
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.nav_bottom_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_quiz);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeQuizFragment()).commit();
         return view;
     }

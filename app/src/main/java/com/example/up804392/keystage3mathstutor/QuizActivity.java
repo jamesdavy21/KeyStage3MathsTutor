@@ -1,12 +1,13 @@
 package com.example.up804392.keystage3mathstutor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.up804392.keystage3mathstutor.ui.about.AboutFragment;
-import com.example.up804392.keystage3mathstutor.ui.home.HomeFragment;
+import com.example.up804392.keystage3mathstutor.ui.quiz.QuizFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,18 +20,30 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity {
+
+    private static final String TOPIC = "TOPIC";
+    private static final String DIFFICULTY = "DIFFICULTY";
 
     private NavigationView sideNavigationView;
     private DrawerLayout drawer;
+    private Toolbar toolbar;
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        Intent intent = getIntent();
+        String topic = intent.getStringExtra(TOPIC);
+        String difficulty = intent.getStringExtra(DIFFICULTY);
+        String title = topic + " quiz - " + difficulty;
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
@@ -40,10 +53,12 @@ public class MainActivity extends AppCompatActivity {
             MenuItem subItem;
             switch (item.getItemId()) {
                 case R.id.nav_home:
-                    changeFragment(new HomeFragment(), R.id.nav_home);
+                    Intent newIntent = new Intent(this, MainActivity.class);
+                    startActivity(newIntent);
                     break;
                 case R.id.nav_about:
                     changeFragment(new AboutFragment(), R.id.nav_about);
+                    toolbar.setTitle(R.string.app_name);
                     break;
                 case R.id.nav_login:
                     item.setVisible(false);
@@ -66,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            changeFragment(new HomeFragment(), R.id.nav_home);
+            changeFragment(new QuizFragment(), R.id.nav_home);
         }
     }
 
