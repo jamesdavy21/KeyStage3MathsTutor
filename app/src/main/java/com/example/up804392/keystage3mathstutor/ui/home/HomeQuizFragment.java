@@ -27,13 +27,10 @@ public class HomeQuizFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_home_quiz, container, false);
         popupLayout = fragmentView.findViewById(R.id.constraint_layout_popup);
-        Button OpenPopupButton = fragmentView.findViewById(R.id.button_test);
-        OpenPopupButton.setOnClickListener(v -> {
-            Button button = (Button) v;
-            topic = button.getText().toString();
-            popupLayout.setVisibility(View.VISIBLE);
-            popupLayout.bringToFront();
-        });
+        Button expressionButton = fragmentView.findViewById(R.id.button_expressions);
+        Button test1Button = fragmentView.findViewById(R.id.button_test1);
+        expressionButton.setOnClickListener(this::onClickOpenPopup);
+        test1Button.setOnClickListener(this::onClickOpenPopup);
 
         ImageButton closePopupButton = popupLayout.findViewById(R.id.imageButton_close);
         closePopupButton.setOnClickListener(v -> popupLayout.setVisibility(View.INVISIBLE));
@@ -46,6 +43,13 @@ public class HomeQuizFragment extends Fragment {
         hardButton.setOnClickListener(this::startQuiz);
 
         return fragmentView;
+    }
+
+    private void onClickOpenPopup(View v) {
+        Button button = (Button) v;
+        topic = button.getText().toString();
+        popupLayout.setVisibility(View.VISIBLE);
+        popupLayout.bringToFront();
     }
 
     private void startQuiz(View view) {

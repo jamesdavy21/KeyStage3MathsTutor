@@ -25,6 +25,9 @@ public class QuizActivity extends AppCompatActivity {
     private static final String TOPIC = "TOPIC";
     private static final String DIFFICULTY = "DIFFICULTY";
 
+    private String topic;
+    private String difficulty;
+
     private NavigationView sideNavigationView;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -36,8 +39,8 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        String topic = intent.getStringExtra(TOPIC);
-        String difficulty = intent.getStringExtra(DIFFICULTY);
+        topic = intent.getStringExtra(TOPIC);
+        difficulty = intent.getStringExtra(DIFFICULTY);
         String title = topic + " quiz - " + difficulty;
 
         toolbar = findViewById(R.id.toolbar);
@@ -86,6 +89,10 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void changeFragment(Fragment fragment, int id) {
+        Bundle bundle = new Bundle();
+        bundle.putString(TOPIC, topic);
+        bundle.putString(DIFFICULTY, difficulty);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
         sideNavigationView.setCheckedItem(id);
     }
@@ -105,13 +112,7 @@ public class QuizActivity extends AppCompatActivity {
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
     }
 
     @Override

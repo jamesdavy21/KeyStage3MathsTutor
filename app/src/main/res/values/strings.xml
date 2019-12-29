@@ -24,6 +24,10 @@
     <string name="finish">Finish</string>
 
     <string name="answer_needed">Answer must not be blank</string>
+    <string name="correct">That is the correct answer</string>
+    <string name="incorrect">That is the incorrect answer</string>
+
+    <string name="solving_expressions">Solving expressions</string>
 
     <string name="about_text">Information about the app goes here. Final year project by UP804392</string>
 </resources>
