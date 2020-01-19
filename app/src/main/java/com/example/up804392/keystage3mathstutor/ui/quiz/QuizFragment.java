@@ -1,6 +1,5 @@
 package com.example.up804392.keystage3mathstutor.ui.quiz;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.example.up804392.keystage3mathstutor.R;
 import com.example.up804392.keystage3mathstutor.quiz.Expressions;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
+import com.example.up804392.keystage3mathstutor.ui.home.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,11 @@ public class QuizFragment extends Fragment {
 
     private static final String TOPIC = "TOPIC";
     private static final String DIFFICULTY = "DIFFICULTY";
+    private static final String SCORE = "SCORE";
     private static final String EQUATION = "Solving expressions";
+    private static final int MAX_NUMBER_OF_QUESTIONS = 10;
 
+    private MainActivity activity;
     private EditText answerCentre;
     private EditText answerLeft;
     private EditText answerRight;
@@ -46,7 +49,8 @@ public class QuizFragment extends Fragment {
     private Switch fractionSwitch;
     private ConstraintLayout answerPopup;
     private int currentQuestion = 1;
-    private static final int MAX_NUMBER_OF_QUESTIONS = 10;
+    private String topic;
+    private String difficulty;
 
     private List<Question> questions;
     private String[] singleAnswers;
@@ -64,6 +68,8 @@ public class QuizFragment extends Fragment {
 
         startQuiz();
 
+        activity.setToolbarTitle(topic + " quiz - " + difficulty);
+
         nextButton.setOnClickListener(this::onNextButtonClick);
 
         previousButton.setOnClickListener(this::onPreviousButtonClick);
@@ -72,11 +78,15 @@ public class QuizFragment extends Fragment {
 
         fractionSwitch.setOnClickListener(this::onFractionSwitchClick);
 
+        activity.uncheckCurrentCheckedItemInNavigationView();
+
         return view;
     }
 
     private View getViewAndSetVariables(@NonNull LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
+
+        activity = (MainActivity) getActivity();
 
         answerCentre = view.findViewById(R.id.editText_answer);
         answerLeft = view.findViewById(R.id.editText_left);
@@ -102,10 +112,10 @@ public class QuizFragment extends Fragment {
     }
 
     private void startQuiz() {
-        String topic = getArguments() != null ? getArguments().getString(TOPIC) : null;
-        String difficulty = getArguments() != null ? getArguments().getString(DIFFICULTY) : null;
+        topic = getArguments() != null ? getArguments().getString(TOPIC) : null;
+        difficulty = getArguments() != null ? getArguments().getString(DIFFICULTY) : null;
         if (topic == null || difficulty == null) {
-            startMainActivityOnError("quiz for given topic or difficulty doesn't exist");
+            returnToHomeFragmentOnError("quiz for given topic or difficulty doesn't exist");
             return;
         }
         QuestionDifficulty questionDifficulty;
@@ -123,7 +133,7 @@ public class QuizFragment extends Fragment {
                 break;
             }
             default: {
-                startMainActivityOnError("no valid difficult was selected");
+                returnToHomeFragmentOnError("no valid difficult was selected");
                 return;
             }
         }
@@ -136,14 +146,14 @@ public class QuizFragment extends Fragment {
                     if (question.isPresent()) {
                         questions.add(question.get());
                     } else {
-                        startMainActivityOnError("no questions available for selected topic and difficulty");
+                        returnToHomeFragmentOnError("no questions available for selected topic and difficulty");
                         return;
                     }
                 }
                 break;
             }
             default: {
-                startMainActivityOnError("no quiz available for selected topic");
+                returnToHomeFragmentOnError("no quiz available for selected topic");
                 return;
             }
         }
@@ -156,18 +166,23 @@ public class QuizFragment extends Fragment {
         questionNumber.setText(String.format("%d/%d", currentQuestion, MAX_NUMBER_OF_QUESTIONS));
     }
 
-    private void startMainActivityOnError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        Intent newIntent = new Intent(getActivity(), MainActivity.class);
-        startActivity(newIntent);
+    private void returnToHomeFragmentOnError(String message) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        activity.changeFragment(new HomeFragment(), R.id.nav_home);
     }
 
     private void onNextButtonClick(View v) {
         if (currentQuestion == MAX_NUMBER_OF_QUESTIONS) {
-            if (haveAllquestionsBeenChecked()) {
-                //end quiz
+            if (haveAllQuestionsBeenChecked()) {
+                Bundle bundle = new Bundle();
+                bundle.putString(TOPIC, topic);
+                bundle.putString(DIFFICULTY, difficulty);
+                bundle.putInt(SCORE, getNumberOfCorrectAnswers());
+                FinishQuizFragment finishedFragment = new FinishQuizFragment();
+                finishedFragment.setArguments(bundle);
+                activity.changeFragment(finishedFragment);
             } else {
-                Toast.makeText(getActivity(), "Not all answers have been checked", Toast.LENGTH_LONG).show();
+                 Toast.makeText(activity, "Not all answers have been checked", Toast.LENGTH_LONG).show();
             }
             return;
         }
@@ -210,7 +225,7 @@ public class QuizFragment extends Fragment {
         if (question.getQuestion().isPresent()) {
             questionTextView.setText(question.getQuestion().get());
         } else {
-            startMainActivityOnError("No question was found");
+            returnToHomeFragmentOnError("No question was found");
         }
     }
 
@@ -232,9 +247,9 @@ public class QuizFragment extends Fragment {
 
     private void onCheckAnswerButtonClick(View v) {
         if (fractionSwitch.isChecked() && (answerLeft.getText().toString().isEmpty() || answerRight.getText().toString().isEmpty())) {
-            Toast.makeText(getActivity(), R.string.answer_needed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.answer_needed, Toast.LENGTH_SHORT).show();
         } else if (!fractionSwitch.isChecked() && answerCentre.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), R.string.answer_needed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.answer_needed, Toast.LENGTH_SHORT).show();
         } else {
             questionAnswered[currentQuestion - 1] = true;
 
@@ -296,13 +311,23 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    private boolean haveAllquestionsBeenChecked() {
+    private boolean haveAllQuestionsBeenChecked() {
         for (boolean b : questionAnswered) {
             if (!b) {
                 return false;
             }
         }
         return true;
+    }
+
+    private int getNumberOfCorrectAnswers() {
+        int correctAnswers = 0;
+        for (int x = 0; x < questions.size(); x++) {
+            if (questions.get(x).isAnswerCorrect(Double.parseDouble(singleAnswers[x]))) {
+                correctAnswers++;
+            }
+        }
+        return correctAnswers;
     }
 
 }

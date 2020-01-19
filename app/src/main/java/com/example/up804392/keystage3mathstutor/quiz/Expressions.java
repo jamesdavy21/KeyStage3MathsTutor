@@ -15,10 +15,7 @@ public class Expressions {
         int questFormatNam = RANDOM.nextInt(5);
         Question question;
         switch (difficulty) {
-            case HARD: {
-                return Optional.empty();
-            }
-            default: {
+            case MEDIUM: {
                 switch (questFormatNam + 1) {
                     case 2: {
                         question = createMediumQuestionUsingFormat2();
@@ -42,6 +39,9 @@ public class Expressions {
                     }
                 }
                 break;
+            }
+            default: {
+                return Optional.empty();
             }
         }
         List<Double> values = getValuesForQuestion(question.getNumbersNeeded());

@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.example.up804392.keystage3mathstutor.QuizActivity;
+import com.example.up804392.keystage3mathstutor.MainActivity;
 import com.example.up804392.keystage3mathstutor.R;
+import com.example.up804392.keystage3mathstutor.ui.quiz.QuizFragment;
+import com.example.up804392.keystage3mathstutor.ui.scoreboard.Scoreboard;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,6 +21,9 @@ public class HomeQuizFragment extends Fragment {
 
     private static final String TOPIC = "TOPIC";
     private static final String DIFFICULTY = "DIFFICULTY";
+    private static final String TYPE = "TYPE";
+    private static final String QUIZ = "QUIZ";
+    private MainActivity activity;
     private View fragmentView;
     private ConstraintLayout popupLayout;
     private String topic;
@@ -27,9 +32,18 @@ public class HomeQuizFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_home_quiz, container, false);
         popupLayout = fragmentView.findViewById(R.id.constraint_layout_popup);
+        activity = (MainActivity) getActivity();
+        findButtonsAndSetOnClickAction();
+        activity.setToolbarTitle(R.string.app_name);
+
+
+        return fragmentView;
+    }
+
+    private void findButtonsAndSetOnClickAction() {
         Button expressionButton = fragmentView.findViewById(R.id.button_expressions);
-        Button test1Button = fragmentView.findViewById(R.id.button_test1);
         expressionButton.setOnClickListener(this::onClickOpenPopup);
+        Button test1Button = fragmentView.findViewById(R.id.button_test1);
         test1Button.setOnClickListener(this::onClickOpenPopup);
 
         ImageButton closePopupButton = popupLayout.findViewById(R.id.imageButton_close);
@@ -42,7 +56,14 @@ public class HomeQuizFragment extends Fragment {
         Button hardButton = popupLayout.findViewById(R.id.button_hard);
         hardButton.setOnClickListener(this::startQuiz);
 
-        return fragmentView;
+        Button scoreboardButton = fragmentView.findViewById(R.id.button_scoreboard);
+        scoreboardButton.setOnClickListener(v -> {
+            Scoreboard scoreboardFragment = new Scoreboard();
+            Bundle bundle =  new Bundle();
+            bundle.putString(TYPE, QUIZ);
+            scoreboardFragment.setArguments(bundle);
+            activity.changeFragment(scoreboardFragment);
+        });
     }
 
     private void onClickOpenPopup(View v) {
@@ -54,9 +75,16 @@ public class HomeQuizFragment extends Fragment {
 
     private void startQuiz(View view) {
         Button button = (Button) view;
-        Intent intent = new Intent(getActivity(), QuizActivity.class);
-        intent.putExtra(TOPIC, topic);
-        intent.putExtra(DIFFICULTY, button.getText().toString());
-        startActivity(intent);
+        if (activity != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(TOPIC, topic);
+            bundle.putString(DIFFICULTY, button.getText().toString());
+            QuizFragment quizFragment = new QuizFragment();
+            quizFragment.setArguments(bundle);
+            activity.changeFragment(quizFragment);
+        } else {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 }
