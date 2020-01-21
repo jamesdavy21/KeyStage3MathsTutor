@@ -30,7 +30,7 @@ public class QuizFragment extends Fragment {
     private static final String TOPIC = "TOPIC";
     private static final String DIFFICULTY = "DIFFICULTY";
     private static final String SCORE = "SCORE";
-    private static final String EQUATION = "Solving expressions";
+    private static final String EQUATION = "Equations";
     private static final int MAX_NUMBER_OF_QUESTIONS = 10;
 
     private MainActivity activity;
@@ -261,7 +261,7 @@ public class QuizFragment extends Fragment {
             } else {
                 answer = Double.parseDouble(answerCentre.getText().toString());
             }
-            singleAnswers[currentQuestion - 1] = String.valueOf(answer);
+            singleAnswers[currentQuestion - 1] = String.valueOf(Question.round(answer));
             setViewForAnsweredQuestion(1);
 
         }

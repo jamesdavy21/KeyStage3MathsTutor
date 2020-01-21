@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_guide_q1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_q2"
+        app:layout_constraintEnd_toStartOf="@+id/textView_guide_a1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_guide_q2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_q3"
+        app:layout_constraintEnd_toStartOf="@+id/textView_guide_a2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_q1" />
+
+    <TextView
+        android:id="@+id/textView_guide_q3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_guide_a3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_q2" />
+
+    <TextView
+        android:id="@+id/textView_guide_a1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_a2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_guide_q1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_guide_a2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_a3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_guide_q2"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_a1" />
+
+    <TextView
+        android:id="@+id/textView_guide_a3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_guide_q3"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_a2" />
+
+    <Button
+        android:id="@+id/button_reveal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reveal_answer"
+        android:hint="@string/key_0"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_q2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_q1" />
+
+    <Button
+        android:id="@+id/button_reveal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reveal_answer"
+        android:hint="@string/key_1"
+        app:layout_constraintBottom_toTopOf="@+id/textView_guide_q3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_q2" />
+
+    <Button
+        android:id="@+id/button_reveal3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reveal_answer"
+        android:hint="@string/key_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide_q3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

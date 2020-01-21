@@ -3,14 +3,17 @@
 
     <item
         android:id="@+id/navigation_guide"
+        android:icon="@android:drawable/ic_menu_search"
         android:title="@string/bottom_nav_guide" />
 
     <item
         android:id="@+id/navigation_quiz"
+        android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/bottom_nav_quiz" />
 
     <item
         android:id="@+id/navigation_game"
+        android:icon="@android:drawable/star_big_on"
         android:title="@string/bottom_nav_game" />
 
 </menu>

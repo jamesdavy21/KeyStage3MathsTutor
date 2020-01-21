@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.up804392.keystage3mathstutor.db.DataLoader;
 import com.example.up804392.keystage3mathstutor.db.Database;
 import com.example.up804392.keystage3mathstutor.ui.about.AboutFragment;
 import com.example.up804392.keystage3mathstutor.ui.home.HomeFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private boolean doubleBackToExitPressedOnce = false;
     private Database database;
+    private static boolean dataBeenLoadedIntoDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,13 @@ public class MainActivity extends AppCompatActivity {
 
     public Database getDatabase() {
         if (database == null) {
+            dataBeenLoadedIntoDatabase = true;
             database = Room.databaseBuilder(getApplicationContext(), Database.class, DATABASE_NAME).build();
+            new Thread(() -> {
+                new DataLoader(database, this).loadDatabase();
+                dataBeenLoadedIntoDatabase = false;
+            }).start();
+
         }
         return database;
     }
@@ -111,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setToolbarTitle(int id) {
         toolbar.setTitle(id);
+    }
+
+    public static boolean isDataBeenLoadedIntoDatabase() {
+        return dataBeenLoadedIntoDatabase;
     }
 
     @Override

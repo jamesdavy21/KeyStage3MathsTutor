@@ -12,29 +12,37 @@ public class Expressions {
     private static final Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
-        int questFormatNam = RANDOM.nextInt(5);
         Question question;
         switch (difficulty) {
+            case EASY: {
+                switch (RANDOM.nextInt(3) + 1) {
+                    case 1: {
+                        question = createEasyQuestionUsingFormat1();
+                        break;
+                    }
+                    case 2: {
+                        question = createEasyQuestionUsingFormat2();
+                        break;
+                    }
+                    default: {
+                        question = createEasyQuestionUsingFormat3();
+                        break;
+                    }
+                }
+                break;
+            }
             case MEDIUM: {
-                switch (questFormatNam + 1) {
+                switch (RANDOM.nextInt(3) + 1) {
+                    case 1: {
+                        question = createMediumQuestionUsingFormat1();
+                        break;
+                    }
                     case 2: {
                         question = createMediumQuestionUsingFormat2();
                         break;
                     }
-                    case 3: {
-                        question = createMediumQuestionUsingFormat3();
-                        break;
-                    }
-                    case 4: {
-                        question = createMediumQuestionUsingFormat4();
-                        break;
-                    }
-                    case 5: {
-                        question = createMediumQuestionUsingFormat5();
-                        break;
-                    }
                     default: {
-                        question = createMediumQuestionUsingFormat1();
+                        question = createMediumQuestionUsingFormat3();
                         break;
                     }
                 }
@@ -78,7 +86,7 @@ public class Expressions {
         return operations;
     }
 
-    private Question createMediumQuestionUsingFormat1() {
+    private Question createEasyQuestionUsingFormat1() {
         return new Question("%.0fx=%.0f", 2, 0, (values) -> {
             if (values.size() == 2) {
                 return Optional.of(values.get(1) / values.get(0));
@@ -91,7 +99,7 @@ public class Expressions {
         });
     }
 
-    private Question createMediumQuestionUsingFormat2() {
+    private Question createEasyQuestionUsingFormat2() {
         return new Question("x%s%.0f=%.0f", 2, 1, (values) -> {
             if (values.size() == 2) {
                 return Optional.of(values.get(1) - values.get(0));
@@ -104,7 +112,7 @@ public class Expressions {
         });
     }
 
-    private Question createMediumQuestionUsingFormat3() {
+    private Question createEasyQuestionUsingFormat3() {
         return new Question("%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 return Optional.of((values.get(2) - values.get(1)) / values.get(0));
@@ -116,7 +124,7 @@ public class Expressions {
         });
     }
 
-    private Question createMediumQuestionUsingFormat4() {
+    private Question createMediumQuestionUsingFormat1() {
         return new Question("%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 return Optional.of((values.get(2) - values.get(0)) / values.get(1));
@@ -129,7 +137,20 @@ public class Expressions {
         });
     }
 
-    private Question createMediumQuestionUsingFormat5() {
+    private Question createMediumQuestionUsingFormat2() {
+        return new Question("%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
+            if (values.size() == 3) {
+                return Optional.of((-values.get(1)) / (values.get(0) - values.get(2)));
+            }
+            return Optional.empty();
+        }, (format, values, operations) -> {
+            if (values.size() == 3 && operations.size() == 1) {
+                return Optional.of(String.format(format, values.get(0), operations.get(0) , values.get(1), values.get(2)));
+            }return Optional.empty();
+        });
+    }
+
+    private Question createMediumQuestionUsingFormat3() {
         return new Question("%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
             if (values.size() == 4) {
                 return Optional.of((values.get(2) - values.get(1)) / (values.get(0) - values.get(3)));

@@ -2,7 +2,6 @@ package com.example.up804392.keystage3mathstutor.ui.scoreboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -16,6 +15,7 @@ import com.example.up804392.keystage3mathstutor.db.Database;
 import com.example.up804392.keystage3mathstutor.db.entities.Score;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -33,7 +33,7 @@ public class Scoreboard extends Fragment {
     private TableLayout table;
     private MainActivity activity;
     private Database database;
-    private MutableLiveData<TableRow> tableRows = new MutableLiveData<>();
+    private MutableLiveData<List<TableRow>> tableRowListener = new MutableLiveData<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class Scoreboard extends Fragment {
 
         scrollView = fragmentView.findViewById(R.id.scrollView_tables);
         table = scrollView.findViewById(R.id.tableLayout_scoreboard);
-
+        activity.uncheckCurrentCheckedItemInNavigationView();
         database = activity.getDatabase();
 
         BottomNavigationView bottomNavigationView = fragmentView.findViewById(R.id.nav_bottom_view);
@@ -58,7 +58,11 @@ public class Scoreboard extends Fragment {
             bottomNavigationView.setSelectedItemId(R.id.navigation_quiz);
         }
 
-        tableRows.observe(this, t -> table.addView(t));
+        tableRowListener.observe(this, tableRows -> {
+            for (TableRow tableRow: tableRows) {
+                table.addView(tableRow);
+            }
+        });
 
 
 
@@ -80,24 +84,9 @@ public class Scoreboard extends Fragment {
 
         TableRow tableRow = new TableRow(getContext());
 
-
-        TextView topic = new TextView(getContext());
-        topic.setText("topic");
-        topic.setPadding(0, 10, 0, 0);
-        topic.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-        tableRow.addView(topic);
-
-        TextView difficulty = new TextView(getContext());
-        difficulty.setText("difficulty");
-        difficulty.setPadding(0, 10, 0, 0);
-        difficulty.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-        tableRow.addView(difficulty);
-
-        TextView scoreTextView = new TextView(getContext());
-        scoreTextView.setText("score");
-        scoreTextView.setPadding(0, 10, 0, 0);
-        scoreTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-        tableRow.addView(scoreTextView);
+        tableRow.addView(createTableTextView("topic"));
+        tableRow.addView(createTableTextView("difficulty"));
+        tableRow.addView(createTableTextView("score"));
 
         table.addView(tableRow);
     }
@@ -106,6 +95,7 @@ public class Scoreboard extends Fragment {
         resetTable();
         new Thread(() -> {
             List<Score> scores = database.scoreboardDao().getAllQuizScores(type);
+            List<TableRow> tableRows = new ArrayList<>();
             for (Score score : scores) {
                 TableRow tableRow = new TableRow(getContext());
 
@@ -115,8 +105,9 @@ public class Scoreboard extends Fragment {
 
                 tableRow.addView(createTableTextView(String.valueOf(score.score)));
 
-                tableRows.postValue(tableRow);
+                tableRows.add(tableRow);
             }
+            tableRowListener.postValue(tableRows);
 
         }).start();
     }
@@ -124,6 +115,7 @@ public class Scoreboard extends Fragment {
     private TextView createTableTextView(String value) {
         TextView textView = new TextView(getContext());
         textView.setText(value);
+        textView.setPadding(0, 10, 0, 10);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
         return textView;
     }
