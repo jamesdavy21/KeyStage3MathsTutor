@@ -7,7 +7,7 @@ import com.example.up804392.keystage3mathstutor.db.entities.ScoreboardDao;
 
 import androidx.room.RoomDatabase;
 
-@androidx.room.Database(entities = {Score.class, Guide.class}, version = 2)
+@androidx.room.Database(entities = {Score.class, Guide.class}, version = 1)
 public abstract class Database extends RoomDatabase {
     public abstract ScoreboardDao scoreboardDao();
 

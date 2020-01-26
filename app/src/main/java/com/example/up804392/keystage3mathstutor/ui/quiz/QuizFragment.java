@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.up804392.keystage3mathstutor.MainActivity;
 import com.example.up804392.keystage3mathstutor.R;
+import com.example.up804392.keystage3mathstutor.quiz.AlgebraicTerms;
 import com.example.up804392.keystage3mathstutor.quiz.Expressions;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
@@ -31,6 +32,7 @@ public class QuizFragment extends Fragment {
     private static final String DIFFICULTY = "DIFFICULTY";
     private static final String SCORE = "SCORE";
     private static final String EQUATION = "Equations";
+    private static final String ALGEBRAIC_TERMS = "Algebraic terms";
     private static final int MAX_NUMBER_OF_QUESTIONS = 10;
 
     private MainActivity activity;
@@ -152,6 +154,21 @@ public class QuizFragment extends Fragment {
                 }
                 break;
             }
+            case ALGEBRAIC_TERMS: {
+                AlgebraicTerms algebraicTerms = new AlgebraicTerms();
+                questions = new ArrayList<>();
+                for (int x = 0; x < MAX_NUMBER_OF_QUESTIONS; x++) {
+                    Optional<Question> question = algebraicTerms.createQuestion(questionDifficulty);
+                    if (question.isPresent()) {
+                        questions.add(question.get());
+                    } else {
+                        returnToHomeFragmentOnError("no questions available for selected topic and difficulty");
+                        return;
+                    }
+                    fractionSwitch.setVisibility(View.INVISIBLE);
+                }
+                break;
+            }
             default: {
                 returnToHomeFragmentOnError("no quiz available for selected topic");
                 return;
@@ -232,7 +249,9 @@ public class QuizFragment extends Fragment {
     private void setViewForNextQuestion(int x) {
         answerPopup.setVisibility(View.INVISIBLE);
         checkAnswerButton.setVisibility(View.VISIBLE);
-        fractionSwitch.setVisibility(View.VISIBLE);
+        if (topic.equals(EQUATION)) {
+            fractionSwitch.setVisibility(View.VISIBLE);
+        }
         if (fractionSwitch.isChecked()) {
             answerLeft.setText(multiAnswers[currentQuestion - x][0]);
             answerRight.setText(multiAnswers[currentQuestion - x][1]);
@@ -253,26 +272,36 @@ public class QuizFragment extends Fragment {
         } else {
             questionAnswered[currentQuestion - 1] = true;
 
-            double answer;
+            String answer;
             if (fractionSwitch.isChecked()) {
                 double answerLeftSide = Double.parseDouble(answerLeft.getText().toString());
                 double answerRightSide = Double.parseDouble(answerRight.getText().toString());
-                answer = answerLeftSide / answerRightSide;
+                answer = String.valueOf(Question.round(answerLeftSide / answerRightSide));
             } else {
-                answer = Double.parseDouble(answerCentre.getText().toString());
+                answer = answerCentre.getText().toString();
             }
-            singleAnswers[currentQuestion - 1] = String.valueOf(Question.round(answer));
+            singleAnswers[currentQuestion - 1] = answer;
             setViewForAnsweredQuestion(1);
 
         }
     }
 
     private void setViewForAnsweredQuestion(int i) {
-        responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(Double.parseDouble(singleAnswers[currentQuestion - i])) ? R.string.correct : R.string.incorrect);
+        if (topic.equals(EQUATION)) {
+            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(Double.parseDouble(singleAnswers[currentQuestion - i])) ? R.string.correct : R.string.incorrect);
+        } else {
+            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
+        }
 
         answerPopup.setVisibility(View.VISIBLE);
         userAnswerTextView.setText(String.format("Your Answer: %s", singleAnswers[currentQuestion - i]));
-        correctAnswerTextView.setText(String.format("The correct answer is: %s", questions.get(currentQuestion - i).solveQuestion().orElse(0d)));
+        String answer;
+        if (topic.equals(EQUATION)) {
+            answer = String.valueOf(Question.round(Double.valueOf(questions.get(currentQuestion - i).solveQuestion().orElse("error"))));
+        } else {
+            answer = questions.get(currentQuestion - i).solveQuestion().orElse("error");
+        }
+        correctAnswerTextView.setText(String.format("The correct answer is: %s", answer));
 
         checkAnswerButton.setVisibility(View.INVISIBLE);
         fractionSwitch.setVisibility(View.INVISIBLE);
@@ -323,8 +352,14 @@ public class QuizFragment extends Fragment {
     private int getNumberOfCorrectAnswers() {
         int correctAnswers = 0;
         for (int x = 0; x < questions.size(); x++) {
-            if (questions.get(x).isAnswerCorrect(Double.parseDouble(singleAnswers[x]))) {
-                correctAnswers++;
+            if (topic.equals(EQUATION)) {
+                if (questions.get(x).isAnswerCorrect(Double.parseDouble(singleAnswers[x]))) {
+                    correctAnswers++;
+                }
+            } else {
+                if (questions.get(x).isAnswerCorrect(singleAnswers[x])) {
+                    correctAnswers++;
+                }
             }
         }
         return correctAnswers;

@@ -44,13 +44,13 @@
         app:layout_constraintWidth_percent=".3" />
 
     <Button
-        android:id="@+id/button_test1"
+        android:id="@+id/button_algebraic_terms"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autoSizeMaxTextSize="25sp"
         android:autoSizeStepGranularity="5sp"
         android:autoSizeTextType="uniform"
-        android:text="something else"
+        android:text="@string/algebraic_terms"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_horizontal_33"
         app:layout_constraintStart_toStartOf="parent"

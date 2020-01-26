@@ -21,9 +21,8 @@ public class Question {
         this.formatter = formatter;
     }
 
-    public Optional<Double> solveQuestion() {
-        Optional<Double> answer = solver.solve(values);
-        return answer.map(Question::round);
+    public Optional<String> solveQuestion() {
+        return solver.solve(values);
     }
 
     public Optional<String> getQuestion() {
@@ -47,7 +46,14 @@ public class Question {
     }
 
     public boolean isAnswerCorrect(double value) {
-        return round(value) == solveQuestion().orElse(999d);
+        if (solveQuestion().isPresent()) {
+            return value == round(Double.valueOf(solveQuestion().get()));
+        }
+        return false;
+    }
+
+    public boolean isAnswerCorrect(String  value) {
+        return value.replaceAll("\\s+","").equals(solveQuestion().orElse("error"));
     }
 
     public static double round(double value) {

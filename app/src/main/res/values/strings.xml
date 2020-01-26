@@ -36,6 +36,7 @@
     <string name="key_2">2</string>
 
     <string name="Equations">Equations</string>
+    <string name="algebraic_terms">Algebraic terms</string>
 
     <string name="what_are_equations">An equation is formed when two expressions are said to be equal.\n
         Typically, equations contain unknown values which are often represented by letters such as ‘X’ and ‘Y’.\n\n

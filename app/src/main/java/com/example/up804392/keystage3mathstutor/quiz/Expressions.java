@@ -89,7 +89,7 @@ public class Expressions {
     private Question createEasyQuestionUsingFormat1() {
         return new Question("%.0fx=%.0f", 2, 0, (values) -> {
             if (values.size() == 2) {
-                return Optional.of(values.get(1) / values.get(0));
+                return Optional.of(String.valueOf(values.get(1) / values.get(0)));
             }
             return Optional.empty();
         }, (format, values, operations) -> {
@@ -102,7 +102,7 @@ public class Expressions {
     private Question createEasyQuestionUsingFormat2() {
         return new Question("x%s%.0f=%.0f", 2, 1, (values) -> {
             if (values.size() == 2) {
-                return Optional.of(values.get(1) - values.get(0));
+                return Optional.of(String.valueOf(values.get(1) - values.get(0)));
             }
             return Optional.empty();
         }, (format, values, operations) -> {
@@ -115,7 +115,7 @@ public class Expressions {
     private Question createEasyQuestionUsingFormat3() {
         return new Question("%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
-                return Optional.of((values.get(2) - values.get(1)) / values.get(0));
+                return Optional.of(String.valueOf((values.get(2) - values.get(1)) / values.get(0)));
             }return Optional.empty();
         }, (format, values, operations) -> {
             if (values.size() == 3 && operations.size() == 1) {
@@ -127,7 +127,7 @@ public class Expressions {
     private Question createMediumQuestionUsingFormat1() {
         return new Question("%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
-                return Optional.of((values.get(2) - values.get(0)) / values.get(1));
+                return Optional.of(String.valueOf((values.get(2) - values.get(0)) / values.get(1)));
             }
             return Optional.empty();
         }, (format, values, operations) -> {
@@ -140,7 +140,7 @@ public class Expressions {
     private Question createMediumQuestionUsingFormat2() {
         return new Question("%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
             if (values.size() == 3) {
-                return Optional.of((-values.get(1)) / (values.get(0) - values.get(2)));
+                return Optional.of(String.valueOf((-values.get(1)) / (values.get(0) - values.get(2))));
             }
             return Optional.empty();
         }, (format, values, operations) -> {
@@ -153,7 +153,7 @@ public class Expressions {
     private Question createMediumQuestionUsingFormat3() {
         return new Question("%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
             if (values.size() == 4) {
-                return Optional.of((values.get(2) - values.get(1)) / (values.get(0) - values.get(3)));
+                return Optional.of(String.valueOf((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));
             }
             return Optional.empty();
         }, (format, values, operations) -> {

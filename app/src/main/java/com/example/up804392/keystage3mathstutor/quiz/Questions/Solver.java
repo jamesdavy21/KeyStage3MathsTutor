@@ -5,6 +5,6 @@ import java.util.Optional;
 
 public interface Solver {
 
-    Optional<Double> solve(List<Double> values);
+    Optional<String> solve(List<Double> values);
 
 }
