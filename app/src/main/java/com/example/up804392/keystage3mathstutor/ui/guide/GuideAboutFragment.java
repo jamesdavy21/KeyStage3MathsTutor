@@ -14,6 +14,7 @@ import com.example.up804392.keystage3mathstutor.db.entities.Guide;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 public class GuideAboutFragment extends Fragment {
     private static final String TOPIC =  "TOPIC";
@@ -21,6 +22,8 @@ public class GuideAboutFragment extends Fragment {
     private MainActivity activity;
     private Database database;
     private TextView guideTextView;
+    private MutableLiveData<String> title = new MutableLiveData<>();
+    private MutableLiveData<String> mainText = new MutableLiveData<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,6 +32,9 @@ public class GuideAboutFragment extends Fragment {
         activity = (MainActivity) getActivity();
         ScrollView scrollView = view.findViewById(R.id.scrollView_guide_about);
         guideTextView = scrollView.findViewById(R.id.textView_guide_about);
+
+        title.observe(this, t -> activity.setToolbarTitle(t));
+        mainText.observe(this, text -> guideTextView.setText(text));
 
         if (database == null) {
             database = activity.getDatabase();
@@ -43,8 +49,8 @@ public class GuideAboutFragment extends Fragment {
     private void setGuide(String topic) {
         new Thread(() -> {
             Guide guide = database.guideDao().getGuide(topic, HEADING + topic);
-            guideTextView.setText(guide.body);
-            activity.setToolbarTitle(guide.heading);
+            mainText.postValue(guide.body);
+            title.postValue(guide.heading);
         }).start();
     }
 

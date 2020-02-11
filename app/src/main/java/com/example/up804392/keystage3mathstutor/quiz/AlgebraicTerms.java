@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class AlgebraicTerms {
+public class AlgebraicTerms implements Quiz {
 
+    private static final String QUESTION = "Simplify the following:\n";
     private static final Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
@@ -104,7 +105,7 @@ public class AlgebraicTerms {
     }
 
     private Question createEasyQuestionUsingFormat1() {
-        return new Question("%.0fx %s %.0fy %s %.0fx %s %.0fy", 4, 3, (values) -> {
+        return new Question(QUESTION + "%.0fx %s %.0fy %s %.0fx %s %.0fy", 4, 3, (values) -> {
             if (values.size() == 4) {
                 double x = values.get(0) + values.get(2);
                 double y =  values.get(1) + values.get(3);
@@ -119,7 +120,7 @@ public class AlgebraicTerms {
     }
 
     private Question createEasyQuestionUsingFormat2() {
-        return new Question("%.0fx^%.0f %s %.0f %s %.0fx %s %.0fx %s %.0f %s %.0fx^%.0f", 7, 5, (values) -> {
+        return new Question(QUESTION + "%.0fx^%.0f %s %.0f %s %.0fx %s %.0fx %s %.0f %s %.0fx^%.0f", 7, 5, (values) -> {
             if (values.size() == 7) {
                 double x = values.get(2) + values.get(3);
                 double x2 = values.get(0) + values.get(5);
@@ -135,7 +136,7 @@ public class AlgebraicTerms {
     }
 
     private Question createEasyQuestionUsingFormat3() {
-        return new Question("%.0fx^%.0f %s %.0f %s %.0f %s %.0fx^%.0f", 5, 3, (values) -> {
+        return new Question(QUESTION + "%.0fx^%.0f %s %.0f %s %.0f %s %.0fx^%.0f", 5, 3, (values) -> {
             if (values.size() == 5) {
                 double x2 = values.get(0) + values.get(3);
                 double constant =  values.get(1) + values.get(2);
@@ -150,7 +151,7 @@ public class AlgebraicTerms {
     }
 
     private Question createMediumQuestionUsingFormat1() {
-        return new Question("%.0fx * %.0fxy", 2, 0, (values) -> {
+        return new Question(QUESTION + "%.0fx * %.0fxy", 2, 0, (values) -> {
             if (values.size() == 2) {
                 double value = values.get(0) * values.get(1);
                 return Optional.of(regex(String.format("%.0fx^2y", value)));
@@ -164,7 +165,7 @@ public class AlgebraicTerms {
     }
 
     private Question createMediumQuestionUsingFormat2() {
-        return new Question("%.0fx^%.0f * %.0fx^%.0f", 4, 0, (values) -> {
+        return new Question(QUESTION + "%.0fx^%.0f * %.0fx^%.0f", 4, 0, (values) -> {
             if (values.size() == 4) {
                 double power = values.get(1) + values.get(3);
                 double value = values.get(0) * values.get(2);
@@ -179,11 +180,11 @@ public class AlgebraicTerms {
     }
 
     private Question createMediumQuestionUsingFormat3() {
-        return new Question("%.0fx(%.0fx%s%.0fy)", 3, 1, (values) -> {
+        return new Question(QUESTION + "%.0fx(%.0fx%s%.0fy)", 3, 1, (values) -> {
             if (values.size() == 3) {
                 double x = values.get(0) * values.get(1);
                 double y = values.get(0) * values.get(2);
-                return Optional.of(regex(String.format("%.0fx^2%s%.0fy", x, y >= 0? "+":"", y)));
+                return Optional.of(regex(String.format("%.0fx^2%s%.0fxy", x, y >= 0? "+":"", y)));
             }
             return Optional.empty();
         }, (format, values, operations) -> {
@@ -194,7 +195,7 @@ public class AlgebraicTerms {
     }
 
     private Question createHardQuestionUsingFormat() {
-        return new Question("(x%s%.0f)(x%s%.0f)", 2, 2, (values) -> {
+        return new Question(QUESTION + "(x%s%.0f)(x%s%.0f)", 2, 2, (values) -> {
             if (values.size() == 2) {
                 double x = values.get(0) + values.get(1);
                 double constant = values.get(0) * values.get(1);

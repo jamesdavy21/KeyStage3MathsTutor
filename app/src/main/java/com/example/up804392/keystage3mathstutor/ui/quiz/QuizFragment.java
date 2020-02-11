@@ -14,8 +14,10 @@ import com.example.up804392.keystage3mathstutor.MainActivity;
 import com.example.up804392.keystage3mathstutor.R;
 import com.example.up804392.keystage3mathstutor.quiz.AlgebraicTerms;
 import com.example.up804392.keystage3mathstutor.quiz.Expressions;
+import com.example.up804392.keystage3mathstutor.quiz.Inequalities;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
+import com.example.up804392.keystage3mathstutor.quiz.Quiz;
 import com.example.up804392.keystage3mathstutor.ui.home.HomeFragment;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class QuizFragment extends Fragment {
     private static final String SCORE = "SCORE";
     private static final String EQUATION = "Equations";
     private static final String ALGEBRAIC_TERMS = "Algebraic terms";
+    private static final String INEQUALITIES = "Inequalities";
     private static final int MAX_NUMBER_OF_QUESTIONS = 10;
 
     private MainActivity activity;
@@ -64,9 +67,9 @@ public class QuizFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = getViewAndSetVariables(inflater, container);
-        singleAnswers = new String[10];
-        multiAnswers = new String[10][2];
-        questionAnswered = new boolean[10];
+        singleAnswers = new String[MAX_NUMBER_OF_QUESTIONS];
+        multiAnswers = new String[MAX_NUMBER_OF_QUESTIONS][2];
+        questionAnswered = new boolean[MAX_NUMBER_OF_QUESTIONS];
 
         startQuiz();
 
@@ -141,32 +144,17 @@ public class QuizFragment extends Fragment {
         }
         switch (topic) {
             case EQUATION: {
-                Expressions expressions = new Expressions();
-                questions = new ArrayList<>();
-                for (int x = 0; x < MAX_NUMBER_OF_QUESTIONS; x++) {
-                    Optional<Question> question = expressions.createQuestion(questionDifficulty);
-                    if (question.isPresent()) {
-                        questions.add(question.get());
-                    } else {
-                        returnToHomeFragmentOnError("no questions available for selected topic and difficulty");
-                        return;
-                    }
-                }
+                createQuestions(new Expressions(), questionDifficulty);
                 break;
             }
             case ALGEBRAIC_TERMS: {
-                AlgebraicTerms algebraicTerms = new AlgebraicTerms();
-                questions = new ArrayList<>();
-                for (int x = 0; x < MAX_NUMBER_OF_QUESTIONS; x++) {
-                    Optional<Question> question = algebraicTerms.createQuestion(questionDifficulty);
-                    if (question.isPresent()) {
-                        questions.add(question.get());
-                    } else {
-                        returnToHomeFragmentOnError("no questions available for selected topic and difficulty");
-                        return;
-                    }
-                    fractionSwitch.setVisibility(View.INVISIBLE);
-                }
+                createQuestions(new AlgebraicTerms(), questionDifficulty);
+                fractionSwitch.setVisibility(View.INVISIBLE);
+                break;
+            }
+            case INEQUALITIES: {
+                createQuestions(new Inequalities(), questionDifficulty);
+                fractionSwitch.setVisibility(View.INVISIBLE);
                 break;
             }
             default: {
@@ -174,9 +162,25 @@ public class QuizFragment extends Fragment {
                 return;
             }
         }
+        if (questions.size() < MAX_NUMBER_OF_QUESTIONS) {
+            return;
+        }
         setCurrentQuestionNumber();
         questionTextView.setText(questions.get(currentQuestion - 1).getQuestion().orElse(""));
 
+    }
+
+    private void createQuestions(Quiz quiz, QuestionDifficulty difficulty) {
+        questions = new ArrayList<>();
+        for (int x = 0; x < MAX_NUMBER_OF_QUESTIONS; x++) {
+            Optional<Question> question = quiz.createQuestion(difficulty);
+            if (question.isPresent()) {
+                questions.add(question.get());
+            } else {
+                returnToHomeFragmentOnError("no questions available for selected topic and difficulty");
+                return;
+            }
+        }
     }
 
     private void setCurrentQuestionNumber() {

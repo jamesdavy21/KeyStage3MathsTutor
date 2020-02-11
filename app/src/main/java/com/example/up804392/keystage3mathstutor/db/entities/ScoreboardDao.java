@@ -10,7 +10,7 @@ import androidx.room.Update;
 @Dao
 public interface ScoreboardDao {
 
-    @Query("SELECT * FROM scoreboard WHERE type = :type ORDER BY topic")
+    @Query("SELECT * FROM scoreboard WHERE type = :type ORDER BY score DESC, topic")
     List<Score> getAllQuizScores(String type);
 
     @Query("SELECT * FROM scoreboard WHERE topic = :topic AND type = 'QUIZ' and difficulty = :difficulty")

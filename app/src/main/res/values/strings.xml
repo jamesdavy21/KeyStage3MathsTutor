@@ -37,8 +37,9 @@
 
     <string name="Equations">Equations</string>
     <string name="algebraic_terms">Algebraic terms</string>
+    <string name="inequalities">Inequalities</string>
 
-    <string name="what_are_equations">An equation is formed when two expressions are said to be equal.\n
+    <string name="what_are_equations">An equation is formed when two expressions are said to be equal. \n
         Typically, equations contain unknown values which are often represented by letters such as ‘X’ and ‘Y’.\n\n
         When solving equations, the goal is to find the actual values of ‘X’ and ‘Y’.\n
         Example: I think of a number (X), multiply by 3, and add 2 with an answer of 17.\n
@@ -53,4 +54,14 @@
     <string name="equation_answers">X = 2,X = 4,X = 6</string>
 
     <string name="about_text">Information about the app goes here. Final year project by UP804392</string>
+    <string name="easy">easy</string>
+    <string name="medium">medium</string>
+    <string name="hard">hard</string>
+    <string name="what_difficulty">What difficulty do you\nwant to try?</string>
+    <string name="return_home">Return home</string>
+    <string name="new_quiz">New Quiz</string>
+    <string name="numerator">Numerator</string>
+    <string name="denominator">Denominator</string>
+    <string name="fraction">Fraction</string>
+    <string name="answer">Answer</string>
 </resources>

@@ -9,6 +9,7 @@
         android:id="@+id/scrollView_tables"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingTop="10dp"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.9"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:stretchColumns="0,1,2">
+            android:stretchColumns="0,1,2"
+            android:background="@drawable/background_light">
 
         </TableLayout>
 

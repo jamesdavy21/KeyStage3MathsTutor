@@ -7,8 +7,9 @@ import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficult
 
 import java.util.*;
 
-public class Expressions {
+public class Expressions implements Quiz{
 
+    private static final String QUESTION = "Solve the following for x:\n";
     private static final Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
@@ -87,7 +88,7 @@ public class Expressions {
     }
 
     private Question createEasyQuestionUsingFormat1() {
-        return new Question("%.0fx=%.0f", 2, 0, (values) -> {
+        return new Question(QUESTION + "%.0fx=%.0f", 2, 0, (values) -> {
             if (values.size() == 2) {
                 return Optional.of(String.valueOf(values.get(1) / values.get(0)));
             }
@@ -100,7 +101,7 @@ public class Expressions {
     }
 
     private Question createEasyQuestionUsingFormat2() {
-        return new Question("x%s%.0f=%.0f", 2, 1, (values) -> {
+        return new Question(QUESTION + "x%s%.0f=%.0f", 2, 1, (values) -> {
             if (values.size() == 2) {
                 return Optional.of(String.valueOf(values.get(1) - values.get(0)));
             }
@@ -113,7 +114,7 @@ public class Expressions {
     }
 
     private Question createEasyQuestionUsingFormat3() {
-        return new Question("%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
+        return new Question(QUESTION + "%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 return Optional.of(String.valueOf((values.get(2) - values.get(1)) / values.get(0)));
             }return Optional.empty();
@@ -125,7 +126,7 @@ public class Expressions {
     }
 
     private Question createMediumQuestionUsingFormat1() {
-        return new Question("%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
+        return new Question(QUESTION + "%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 return Optional.of(String.valueOf((values.get(2) - values.get(0)) / values.get(1)));
             }
@@ -138,7 +139,7 @@ public class Expressions {
     }
 
     private Question createMediumQuestionUsingFormat2() {
-        return new Question("%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
+        return new Question(QUESTION + "%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
             if (values.size() == 3) {
                 return Optional.of(String.valueOf((-values.get(1)) / (values.get(0) - values.get(2))));
             }
@@ -151,7 +152,7 @@ public class Expressions {
     }
 
     private Question createMediumQuestionUsingFormat3() {
-        return new Question("%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
+        return new Question(QUESTION + "%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
             if (values.size() == 4) {
                 return Optional.of(String.valueOf((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));
             }

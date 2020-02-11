@@ -30,7 +30,7 @@ public class DataLoader {
     private boolean isDataNeededToBeCreated() {
         int numberOfGuides = database.guideDao().getNumberOfGuides();
 
-        return numberOfGuides == 0;
+        return numberOfGuides < 2;
     }
 
     private void addGuide(String topic, String body) {

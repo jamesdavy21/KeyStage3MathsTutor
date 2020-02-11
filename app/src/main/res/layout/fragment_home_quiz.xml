@@ -4,16 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView_quick_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="quick start guide"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_vertical_25"
         android:layout_width="wrap_content"
@@ -35,7 +25,9 @@
         android:autoSizeMaxTextSize="25sp"
         android:autoSizeStepGranularity="5sp"
         android:autoSizeTextType="uniform"
+        android:background="@drawable/button_default"
         android:text="@string/Equations"
+        android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_horizontal_66"
         app:layout_constraintStart_toStartOf="@+id/guideline_horizontal_33"
@@ -50,10 +42,29 @@
         android:autoSizeMaxTextSize="25sp"
         android:autoSizeStepGranularity="5sp"
         android:autoSizeTextType="uniform"
+        android:background="@drawable/button_default"
         android:text="@string/algebraic_terms"
+        android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_horizontal_33"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".3" />
+
+    <Button
+        android:id="@+id/button_inequalities"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="25sp"
+        android:autoSizeStepGranularity="5sp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/button_default"
+        android:text="@string/inequalities"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_horizontal_66"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".3" />
@@ -62,11 +73,15 @@
         android:id="@+id/constraint_layout_popup"
         layout="@layout/popup_quiz"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_75"
-        app:layout_constraintStart_toStartOf="@id/guideline_vertical_25"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".5"
         app:layout_optimizationLevel="dimensions" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -87,7 +102,10 @@
         android:id="@+id/button_scoreboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_default"
         android:text="@string/scoreboard"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

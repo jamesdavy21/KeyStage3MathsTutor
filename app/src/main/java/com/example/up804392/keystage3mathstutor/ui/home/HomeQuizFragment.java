@@ -43,8 +43,10 @@ public class HomeQuizFragment extends Fragment {
     private void findButtonsAndSetOnClickAction() {
         Button expressionButton = fragmentView.findViewById(R.id.button_expressions);
         expressionButton.setOnClickListener(this::onClickOpenPopup);
-        Button test1Button = fragmentView.findViewById(R.id.button_algebraic_terms);
-        test1Button.setOnClickListener(this::onClickOpenPopup);
+        Button algebraicTermsButton = fragmentView.findViewById(R.id.button_algebraic_terms);
+        algebraicTermsButton.setOnClickListener(this::onClickOpenPopup);
+        Button inequalitiesButton = fragmentView.findViewById(R.id.button_inequalities);
+        inequalitiesButton.setOnClickListener(this::onClickOpenPopup);
 
         ImageButton closePopupButton = popupLayout.findViewById(R.id.imageButton_close);
         closePopupButton.setOnClickListener(v -> popupLayout.setVisibility(View.INVISIBLE));
