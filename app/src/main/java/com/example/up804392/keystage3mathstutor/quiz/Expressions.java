@@ -1,19 +1,22 @@
 package com.example.up804392.keystage3mathstutor.quiz;
 
 
-
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
+import com.example.up804392.keystage3mathstutor.quiz.Questions.Quiz;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
-public class Expressions implements Quiz{
+public class Expressions implements Quiz {
 
     private static final String QUESTION = "Solve the following for x:\n";
-    private static final Random RANDOM = new Random();
+    private Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
-        Question question;
+        MathQuestion question;
         switch (difficulty) {
             case EASY: {
                 switch (RANDOM.nextInt(3) + 1) {
@@ -61,8 +64,8 @@ public class Expressions implements Quiz{
 
     private List<Double> getValuesForQuestion(int numberOfNeededValues) {
         List<Double> values = new ArrayList<>();
-        for(int x = 0; x < numberOfNeededValues; x++) {
-            double value =  RANDOM.nextInt(10) - RANDOM.nextInt(6);
+        for (int x = 0; x < numberOfNeededValues; x++) {
+            double value = RANDOM.nextInt(10) - RANDOM.nextInt(6);
             if (value == 0) {
                 value++;
             }
@@ -73,7 +76,7 @@ public class Expressions implements Quiz{
 
     private List<String> getOperationsForQuestion(int numberOfNeededOperations, List<Double> values) {
         List<String> operations = new ArrayList<>();
-        for(int x = 1; x <= numberOfNeededOperations; x++) {
+        for (int x = 1; x <= numberOfNeededOperations; x++) {
             if (x == 1 && values.size() == 2 && values.get(0) > 0) {
                 operations.add("+");
             } else if (x == 1 && (values.size() == 3 || values.size() == 4) && values.get(1) > 0) {
@@ -87,80 +90,87 @@ public class Expressions implements Quiz{
         return operations;
     }
 
-    private Question createEasyQuestionUsingFormat1() {
-        return new Question(QUESTION + "%.0fx=%.0f", 2, 0, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat1() {
+        return new MathQuestion(QUESTION + "%.0fx=%.0f", 2, 0, (values) -> {
             if (values.size() == 2) {
-                return Optional.of(String.valueOf(values.get(1) / values.get(0)));
+                return String.valueOf(MathQuestion.round(values.get(1) / values.get(0)));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 2) {
                 return Optional.of(String.format(format, values.get(0), values.get(1)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createEasyQuestionUsingFormat2() {
-        return new Question(QUESTION + "x%s%.0f=%.0f", 2, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat2() {
+        return new MathQuestion(QUESTION + "x%s%.0f=%.0f", 2, 1, (values) -> {
             if (values.size() == 2) {
-                return Optional.of(String.valueOf(values.get(1) - values.get(0)));
+                return String.valueOf(MathQuestion.round(values.get(1) - values.get(0)));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 2 && operations.size() == 1) {
                 return Optional.of(String.format(format, operations.get(0), values.get(0), values.get(1)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createEasyQuestionUsingFormat3() {
-        return new Question(QUESTION + "%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat3() {
+        return new MathQuestion(QUESTION + "%.0fx%s%.0f=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
-                return Optional.of(String.valueOf((values.get(2) - values.get(1)) / values.get(0)));
-            }return Optional.empty();
+                return String.valueOf(MathQuestion.round((values.get(2) - values.get(1)) / values.get(0)));
+            }
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3 && operations.size() == 1) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createMediumQuestionUsingFormat1() {
-        return new Question(QUESTION + "%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
+    private MathQuestion createMediumQuestionUsingFormat1() {
+        return new MathQuestion(QUESTION + "%.0f%s%.0fx=%.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
-                return Optional.of(String.valueOf((values.get(2) - values.get(0)) / values.get(1)));
+                return String.valueOf(MathQuestion.round((values.get(2) - values.get(0)) / values.get(1)));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3 && operations.size() == 1) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
-        });
-    }
-
-    private Question createMediumQuestionUsingFormat2() {
-        return new Question(QUESTION + "%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
-            if (values.size() == 3) {
-                return Optional.of(String.valueOf((-values.get(1)) / (values.get(0) - values.get(2))));
             }
             return Optional.empty();
-        }, (format, values, operations) -> {
-            if (values.size() == 3 && operations.size() == 1) {
-                return Optional.of(String.format(format, values.get(0), operations.get(0) , values.get(1), values.get(2)));
-            }return Optional.empty();
         });
     }
 
-    private Question createMediumQuestionUsingFormat3() {
-        return new Question(QUESTION + "%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
+    private MathQuestion createMediumQuestionUsingFormat2() {
+        return new MathQuestion(QUESTION + "%.0fx%s%.0f=%.0fx", 3, 1, (values) -> {
+            if (values.size() == 3) {
+                return String.valueOf(MathQuestion.round((-values.get(1)) / (values.get(0) - values.get(2))));
+            }
+            return "";
+        }, (format, values, operations) -> {
+            if (values.size() == 3 && operations.size() == 1) {
+                return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
+            }
+            return Optional.empty();
+        });
+    }
+
+    private MathQuestion createMediumQuestionUsingFormat3() {
+        return new MathQuestion(QUESTION + "%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
             if (values.size() == 4) {
-                return Optional.of(String.valueOf((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));
+                return String.valueOf(MathQuestion.round((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 4 && operations.size() == 2) {
-                return Optional.of(String.format(format, values.get(0), operations.get(0) , values.get(1), values.get(2), operations.get(1), values.get(3)));
-            }return Optional.empty();
+                return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2), operations.get(1), values.get(3)));
+            }
+            return Optional.empty();
         });
     }
 }

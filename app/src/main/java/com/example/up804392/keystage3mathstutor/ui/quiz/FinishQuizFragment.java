@@ -22,8 +22,9 @@ public class FinishQuizFragment extends Fragment {
     private static final String DIFFICULTY = "DIFFICULTY";
     private static final String SCORE = "SCORE";
     private static final String TYPE = "QUIZ";
-    private static final String FINISH = "Well done \n You have completed %s\n on %s difficulty";
     private static final String FINAL_SCORE = "Your final score is:\n%d";
+    private static final String NEXT_LEVEL = "Well done \n You got a perfect score\n Use the new quiz button to start a new quiz on the next difficultly";
+    private boolean useNextDifficulty;
 
     private String topic;
     private String difficulty;
@@ -54,7 +55,15 @@ public class FinishQuizFragment extends Fragment {
 
         newQuizButton.setOnClickListener(v -> {
             QuizFragment fragment = new QuizFragment();
-            fragment.setArguments(getArguments());
+            Bundle bundle = getArguments();
+            if (useNextDifficulty) {
+                if (difficulty.equals(activity.getString(R.string.easy))) {
+                    bundle.putString(DIFFICULTY, activity.getString(R.string.medium));
+                } else {
+                    bundle.putString(DIFFICULTY, activity.getString(R.string.hard));
+                }
+            }
+            fragment.setArguments(bundle);
             activity.changeFragment(fragment);
         });
 
@@ -64,15 +73,20 @@ public class FinishQuizFragment extends Fragment {
 
     private void setTextViewsMessage() {
         new Thread(() -> {
-            Score score = database.scoreboardDao().getQuizScoreForGivenTopicAndDifficulty(topic, difficulty);
-            if (score == null || score.score < this.score) {
+            Score scoreEntity = database.scoreboardDao().getQuizScoreForGivenTopicAndDifficulty(topic, difficulty);
+            if (score == 10 && (difficulty.equals(activity.getString(R.string.easy)) || difficulty.equals(activity.getString(R.string.medium)))) {
+                messageTextView.setText(NEXT_LEVEL);
+                useNextDifficulty = true;
+                scoreEntity = new Score(topic, TYPE, difficulty, score);
+                saveNewHighScore(scoreEntity);
+            } else if (scoreEntity == null || scoreEntity.score < score) {
                 messageTextView.setText(R.string.highScore);
-                score = new Score(topic, TYPE, difficulty, this.score);
-                saveNewHighScore(score);
+                scoreEntity = new Score(topic, TYPE, difficulty, score);
+                saveNewHighScore(scoreEntity);
             } else {
-            messageTextView.setText(String.format(FINISH, topic, difficulty));
-        }
-        scoreTextView.setText(String.format(FINAL_SCORE, this.score));
+                messageTextView.setText(String.format(activity.getString(R.string.finish_message), topic, difficulty));
+            }
+        scoreTextView.setText(String.format(FINAL_SCORE, score));
         }).start();
 
     }

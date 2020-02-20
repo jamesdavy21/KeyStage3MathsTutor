@@ -64,4 +64,6 @@
     <string name="denominator">Denominator</string>
     <string name="fraction">Fraction</string>
     <string name="answer">Answer</string>
+    <string name="finish_message">Well done \n You have completed %s\n on %s difficulty"</string>
+    <string name="final_score_message">Your final score is:\n%d"</string>
 </resources>

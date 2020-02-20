@@ -15,9 +15,10 @@ import com.example.up804392.keystage3mathstutor.R;
 import com.example.up804392.keystage3mathstutor.quiz.AlgebraicTerms;
 import com.example.up804392.keystage3mathstutor.quiz.Expressions;
 import com.example.up804392.keystage3mathstutor.quiz.Inequalities;
+import com.example.up804392.keystage3mathstutor.quiz.MathQuestion;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
-import com.example.up804392.keystage3mathstutor.quiz.Quiz;
+import com.example.up804392.keystage3mathstutor.quiz.Questions.Quiz;
 import com.example.up804392.keystage3mathstutor.ui.home.HomeFragment;
 
 import java.util.ArrayList;
@@ -280,7 +281,7 @@ public class QuizFragment extends Fragment {
             if (fractionSwitch.isChecked()) {
                 double answerLeftSide = Double.parseDouble(answerLeft.getText().toString());
                 double answerRightSide = Double.parseDouble(answerRight.getText().toString());
-                answer = String.valueOf(Question.round(answerLeftSide / answerRightSide));
+                answer = String.valueOf(MathQuestion.round(answerLeftSide / answerRightSide));
             } else {
                 answer = answerCentre.getText().toString();
             }
@@ -292,7 +293,7 @@ public class QuizFragment extends Fragment {
 
     private void setViewForAnsweredQuestion(int i) {
         if (topic.equals(EQUATION)) {
-            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(Double.parseDouble(singleAnswers[currentQuestion - i])) ? R.string.correct : R.string.incorrect);
+            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
         } else {
             responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
         }
@@ -301,9 +302,9 @@ public class QuizFragment extends Fragment {
         userAnswerTextView.setText(String.format("Your Answer: %s", singleAnswers[currentQuestion - i]));
         String answer;
         if (topic.equals(EQUATION)) {
-            answer = String.valueOf(Question.round(Double.valueOf(questions.get(currentQuestion - i).solveQuestion().orElse("error"))));
+            answer = String.valueOf(MathQuestion.round(Double.valueOf(questions.get(currentQuestion - i).solveQuestion())));
         } else {
-            answer = questions.get(currentQuestion - i).solveQuestion().orElse("error");
+            answer = questions.get(currentQuestion - i).solveQuestion();
         }
         correctAnswerTextView.setText(String.format("The correct answer is: %s", answer));
 
@@ -357,7 +358,7 @@ public class QuizFragment extends Fragment {
         int correctAnswers = 0;
         for (int x = 0; x < questions.size(); x++) {
             if (topic.equals(EQUATION)) {
-                if (questions.get(x).isAnswerCorrect(Double.parseDouble(singleAnswers[x]))) {
+                if (questions.get(x).isAnswerCorrect(singleAnswers[x])) {
                     correctAnswers++;
                 }
             } else {

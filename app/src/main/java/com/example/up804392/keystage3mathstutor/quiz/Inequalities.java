@@ -2,6 +2,7 @@ package com.example.up804392.keystage3mathstutor.quiz;
 
 import com.example.up804392.keystage3mathstutor.quiz.Questions.Question;
 import com.example.up804392.keystage3mathstutor.quiz.Questions.QuestionDifficulty;
+import com.example.up804392.keystage3mathstutor.quiz.Questions.Quiz;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +13,10 @@ public class Inequalities implements Quiz {
 
     private static final String QUESTION = "What values can x be to\n satisfy the following inequality:\n";
     private static final String QUESTION_HARD = "What values can x be to\n satisfy the following inequalitys:\n";
-    private static final Random RANDOM = new Random();
+    private Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
-        Question question;
+        MathQuestion question;
         switch (difficulty) {
             case EASY: {
                 switch (RANDOM.nextInt(4) + 1) {
@@ -90,13 +91,13 @@ public class Inequalities implements Quiz {
     private List<Double> getValuesForQuestion(int numberOfNeededValues, QuestionDifficulty difficulty) {
         List<Double> values = new ArrayList<>();
         double value;
-        for(int x = 0; x < numberOfNeededValues; x++) {
+        for (int x = 0; x < numberOfNeededValues; x++) {
             if (difficulty == QuestionDifficulty.HARD && (x == 0 || x == 3)) {
-                value =  RANDOM.nextInt(5) + 6;
-            } else if (difficulty == QuestionDifficulty.HARD && (x ==1 || x == 2)) {
-                value =  RANDOM.nextInt(5) ;
+                value = RANDOM.nextInt(5) + 6;
+            } else if (difficulty == QuestionDifficulty.HARD && (x == 1 || x == 2)) {
+                value = RANDOM.nextInt(5);
             } else {
-                value =  RANDOM.nextInt(10);
+                value = RANDOM.nextInt(10);
             }
 
             if (value == 0) {
@@ -115,9 +116,9 @@ public class Inequalities implements Quiz {
 
     private List<String> getOperationsForQuestion(int numberOfNeededOperations, List<Double> values) {
         List<String> operations = new ArrayList<>();
-        for(int x = 1; x <= numberOfNeededOperations; x++) {
+        for (int x = 1; x <= numberOfNeededOperations; x++) {
             if (values.size() == 2) {
-                if (values.get(x-1) > 0) {
+                if (values.get(x - 1) > 0) {
                     operations.add("+");
                 } else {
                     operations.add("");
@@ -138,121 +139,129 @@ public class Inequalities implements Quiz {
         return value;
     }
 
-    private Question createEasyQuestionUsingFormat1() {
-        return new Question(QUESTION + "%.0fx %s %.0f < %.0f", 3, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat1() {
+        return new MathQuestion(QUESTION + "%.0fx %s %.0f < %.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 double constant = (values.get(2) - values.get(1)) / values.get(0);
-                return Optional.of(regex(String.format("x<%.2f", constant)));
+                return regex(String.format("x<%.2f", constant));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createEasyQuestionUsingFormat2() {
-        return new Question(QUESTION + "%.0f %s %.0fx > %.0f", 3, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat2() {
+        return new MathQuestion(QUESTION + "%.0f %s %.0fx > %.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 double constant = (values.get(2) - values.get(0)) / values.get(1);
-                return Optional.of(regex(String.format("x>%.2f", constant)));
+                return regex(String.format("x>%.2f", constant));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createEasyQuestionUsingFormat3() {
-        return new Question(QUESTION + "%.0f %s %.0fx <= %.0f", 3, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat3() {
+        return new MathQuestion(QUESTION + "%.0f %s %.0fx <= %.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 double constant = (values.get(2) - values.get(0)) / values.get(1);
-                return Optional.of(regex(String.format("x<=%.2f", constant)));
+                return regex(String.format("x<=%.2f", constant));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createEasyQuestionUsingFormat4() {
-        return new Question(QUESTION + "%.0fx %s %.0f >= %.0f", 3, 1, (values) -> {
+    private MathQuestion createEasyQuestionUsingFormat4() {
+        return new MathQuestion(QUESTION + "%.0fx %s %.0f >= %.0f", 3, 1, (values) -> {
             if (values.size() == 3) {
                 double constant = (values.get(2) - values.get(1)) / values.get(0);
-                return Optional.of(regex(String.format("x>=%.2f", constant)));
+                return regex(String.format("x>=%.2f", constant));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 3) {
                 return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
     //add medium questions
 
-    private Question createHardQuestionUsingFormat1() {
-        return new Question(QUESTION_HARD + "x %s %.0f > %.0f and x %s %.0f < %.0f", 4, 2, (values) -> {
+    private MathQuestion createHardQuestionUsingFormat1() {
+        return new MathQuestion(QUESTION_HARD + "x %s %.0f > %.0f and x %s %.0f < %.0f", 4, 2, (values) -> {
             if (values.size() == 4) {
                 double greater = values.get(1) - values.get(0);
                 double lesser = values.get(3) - values.get(2);
-                return Optional.of(regex(String.format("%.0f<x<%.0f", greater, lesser)));
+                return regex(String.format("%.0f<x<%.0f", greater, lesser));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 4) {
                 return Optional.of(String.format(format, operations.get(0), values.get(0), values.get(1), operations.get(1), values.get(2), values.get(3)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createHardQuestionUsingFormat2() {
-        return new Question(QUESTION_HARD + "x %s %.0f >= %.0f and x %s %.0f < %.0f", 4, 2, (values) -> {
+    private MathQuestion createHardQuestionUsingFormat2() {
+        return new MathQuestion(QUESTION_HARD + "x %s %.0f >= %.0f and x %s %.0f < %.0f", 4, 2, (values) -> {
             if (values.size() == 4) {
                 double greater = values.get(1) - values.get(0);
                 double lesser = values.get(3) - values.get(2);
-                return Optional.of(regex(String.format("%.0f<=x<%.0f", greater, lesser)));
+                return regex(String.format("%.0f<=x<%.0f", greater, lesser));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 4) {
                 return Optional.of(String.format(format, operations.get(0), values.get(0), values.get(1), operations.get(1), values.get(2), values.get(3)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createHardQuestionUsingFormat3() {
-        return new Question(QUESTION_HARD + "x %s %.0f > %.0f and x %s %.0f <= %.0f", 4, 2, (values) -> {
+    private MathQuestion createHardQuestionUsingFormat3() {
+        return new MathQuestion(QUESTION_HARD + "x %s %.0f > %.0f and x %s %.0f <= %.0f", 4, 2, (values) -> {
             if (values.size() == 4) {
                 double greater = values.get(1) - values.get(0);
                 double lesser = values.get(3) - values.get(2);
-                return Optional.of(regex(String.format("%.0f<x<=%.0f", greater, lesser)));
+                return regex(String.format("%.0f<x<=%.0f", greater, lesser));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 4) {
                 return Optional.of(String.format(format, operations.get(0), values.get(0), values.get(1), operations.get(1), values.get(2), values.get(3)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
-    private Question createHardQuestionUsingFormat4() {
-        return new Question(QUESTION_HARD + "x %s %.0f >= %.0f and x %s %.0f <= %.0f", 4, 2, (values) -> {
+    private MathQuestion createHardQuestionUsingFormat4() {
+        return new MathQuestion(QUESTION_HARD + "x %s %.0f >= %.0f and x %s %.0f <= %.0f", 4, 2, (values) -> {
             if (values.size() == 4) {
                 double greater = values.get(1) - values.get(0);
                 double lesser = values.get(3) - values.get(2);
-                return Optional.of(regex(String.format("%.0f<=x<=%.0f", greater, lesser)));
+                return regex(String.format("%.0f<=x<=%.0f", greater, lesser));
             }
-            return Optional.empty();
+            return "";
         }, (format, values, operations) -> {
             if (values.size() == 4) {
                 return Optional.of(String.format(format, operations.get(0), values.get(0), values.get(1), operations.get(1), values.get(2), values.get(3)));
-            }return Optional.empty();
+            }
+            return Optional.empty();
         });
     }
 
