@@ -35,7 +35,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class InequalitiesTest {
 
     private static final String QUESTION = "What values can x be to\n satisfy the following inequality:\n";
-    private static final String QUESTION_HARD = "What values can x be to\n satisfy the following inequalitys:\n";
+    private static final String QUESTION_HARD = "What values can x be to\n satisfy the following inequalities:\n";
 
     @Mock
     Random random;
@@ -180,7 +180,7 @@ public class InequalitiesTest {
 
 
 
-    private Quiz mockInequalities(int questionFormatNumber) throws Exception {
+    private  Quiz mockInequalities(int questionFormatNumber) throws Exception {
         PowerMockito.whenNew(Random.class).withAnyArguments().thenReturn(random);
         PowerMockito.whenNew(Random.class).withNoArguments().thenReturn(random);
         when(random.nextInt(anyInt())).thenReturn(questionFormatNumber);

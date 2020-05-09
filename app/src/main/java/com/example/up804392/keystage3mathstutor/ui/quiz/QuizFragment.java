@@ -167,7 +167,7 @@ public class QuizFragment extends Fragment {
             return;
         }
         setCurrentQuestionNumber();
-        questionTextView.setText(questions.get(currentQuestion - 1).getQuestion().orElse(""));
+        questionTextView.setText((String) questions.get(currentQuestion - 1).getQuestion().orElse(""));
 
     }
 
@@ -204,7 +204,7 @@ public class QuizFragment extends Fragment {
                 finishedFragment.setArguments(bundle);
                 activity.changeFragment(finishedFragment);
             } else {
-                 Toast.makeText(activity, "Not all answers have been checked", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Not all answers have been checked", Toast.LENGTH_LONG).show();
             }
             return;
         }
@@ -245,7 +245,7 @@ public class QuizFragment extends Fragment {
     private void displayNextQuestion() {
         Question question = questions.get(currentQuestion - 1);
         if (question.getQuestion().isPresent()) {
-            questionTextView.setText(question.getQuestion().get());
+            questionTextView.setText((String) question.getQuestion().get());
         } else {
             returnToHomeFragmentOnError("No question was found");
         }
@@ -292,20 +292,12 @@ public class QuizFragment extends Fragment {
     }
 
     private void setViewForAnsweredQuestion(int i) {
-        if (topic.equals(EQUATION)) {
-            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
-        } else {
-            responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
-        }
+        responseTextView.setText(questions.get(currentQuestion - i).isAnswerCorrect(singleAnswers[currentQuestion - i]) ? R.string.correct : R.string.incorrect);
+
 
         answerPopup.setVisibility(View.VISIBLE);
         userAnswerTextView.setText(String.format("Your Answer: %s", singleAnswers[currentQuestion - i]));
-        String answer;
-        if (topic.equals(EQUATION)) {
-            answer = String.valueOf(MathQuestion.round(Double.valueOf(questions.get(currentQuestion - i).solveQuestion())));
-        } else {
-            answer = questions.get(currentQuestion - i).solveQuestion();
-        }
+        String answer = questions.get(currentQuestion - i).solveQuestion();
         correctAnswerTextView.setText(String.format("The correct answer is: %s", answer));
 
         checkAnswerButton.setVisibility(View.INVISIBLE);
@@ -357,14 +349,8 @@ public class QuizFragment extends Fragment {
     private int getNumberOfCorrectAnswers() {
         int correctAnswers = 0;
         for (int x = 0; x < questions.size(); x++) {
-            if (topic.equals(EQUATION)) {
-                if (questions.get(x).isAnswerCorrect(singleAnswers[x])) {
-                    correctAnswers++;
-                }
-            } else {
-                if (questions.get(x).isAnswerCorrect(singleAnswers[x])) {
-                    correctAnswers++;
-                }
+            if (questions.get(x).isAnswerCorrect(singleAnswers[x])) {
+                correctAnswers++;
             }
         }
         return correctAnswers;

@@ -8,7 +8,6 @@ import com.example.up804392.keystage3mathstutor.quiz.Questions.Quiz;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -23,6 +22,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
@@ -36,8 +36,6 @@ public class ExpressionsTest {
 
     private static final String QUESTION = "Solve the following for x:\n";
 
-    @Mock
-    Random random;
 
     @Test
     public void ExpressionsEasyQuestionCreated() throws Exception {
@@ -58,16 +56,27 @@ public class ExpressionsTest {
     }
 
     @Test
+    public void ExpressionsHardQuestionCreated() throws Exception {
+        for (int x = 0; x <3; x++) {
+            Quiz quiz = mockExpressions(x);
+            Optional<Question> question = quiz.createQuestion(QuestionDifficulty.HARD);
+            assertTrue(String.format("Question format %s not present", x+1), question.isPresent());
+        }
+    }
+
+    @Test
     public void ExpressionsEasyQuestion1SolveCorrectly() throws Exception {
         Quiz quiz = mockExpressions(0);
-        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(5d, 2d)), Collections.emptyList(), QuestionDifficulty.EASY);
+        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(5d, 2d)),
+                Collections.emptyList(), QuestionDifficulty.EASY);
         assertEquals("0.4", question.solveQuestion());
     }
 
     @Test
     public void ExpressionsEasyQuestion1FormattedCorrectly() throws Exception {
         Quiz quiz = mockExpressions(0);
-        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(5d, 2d)),Collections.emptyList(), QuestionDifficulty.EASY);
+        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(5d, 2d)),
+                Collections.emptyList(), QuestionDifficulty.EASY);
         assertTrue(question.getQuestion().isPresent());
         assertEquals(QUESTION + "5x=2", question.getQuestion().get());
     }
@@ -76,7 +85,7 @@ public class ExpressionsTest {
     public void ExpressionsEasyQuestion2SolveCorrectly() throws Exception {
         Quiz quiz = mockExpressions(1);
         Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(-2d, 2d)),Collections.singletonList("+"), QuestionDifficulty.EASY);
-        assertEquals("4.0", question.solveQuestion());
+        assertEquals("4", question.solveQuestion());
     }
 
     @Test
@@ -91,7 +100,7 @@ public class ExpressionsTest {
     public void ExpressionsEasyQuestion3SolveCorrectly() throws Exception {
         Quiz quiz = mockExpressions(2);
         Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(2d, -2d, 10d)),Collections.singletonList("-"), QuestionDifficulty.EASY);
-        assertEquals("6.0", question.solveQuestion());
+        assertEquals("6", question.solveQuestion());
     }
 
     @Test
@@ -147,8 +156,24 @@ public class ExpressionsTest {
         assertEquals(QUESTION + "5x+5=10+3x", question.getQuestion().get());
     }
 
+    @Test
+    public void ExpressionsHardQuestion1SolveCorrectly() throws Exception {
+        Quiz quiz = mockExpressions(2);
+        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(10d, 5d, 10d, 3d)), new ArrayList<>(Arrays.asList("+", "+")), QuestionDifficulty.HARD);
+        assertEquals("0.71", question.solveQuestion());
+    }
+
+    @Test
+    public void ExpressionsHardQuestion1FormattedCorrectly() throws Exception {
+        Quiz quiz = mockExpressions(2);
+        Question question = createQuestionAndSetValuesForTest(quiz, new ArrayList<>(Arrays.asList(10d, 5d, 10d, 3d)), new ArrayList<>(Arrays.asList("+", "+")), QuestionDifficulty.HARD);
+        assertTrue(question.getQuestion().isPresent());
+        assertEquals(QUESTION + "10x+5=10+3x", question.getQuestion().get());
+    }
+
 
     private Quiz mockExpressions(int questionFormatNumber) throws Exception {
+        Random random = mock(Random.class);
         PowerMockito.whenNew(Random.class).withAnyArguments().thenReturn(random);
         PowerMockito.whenNew(Random.class).withNoArguments().thenReturn(random);
         when(random.nextInt(anyInt())).thenReturn(questionFormatNumber);

@@ -12,7 +12,6 @@ public class Score {
         this.type = type;
         this.difficulty = difficulty;
         this.score = score;
-
     }
 
     @NonNull

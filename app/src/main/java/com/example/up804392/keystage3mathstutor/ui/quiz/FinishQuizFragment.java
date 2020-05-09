@@ -24,7 +24,9 @@ public class FinishQuizFragment extends Fragment {
     private static final String TYPE = "QUIZ";
     private static final String FINAL_SCORE = "Your final score is:\n%d";
     private static final String NEXT_LEVEL = "Well done \n You got a perfect score\n Use the new quiz button to start a new quiz on the next difficultly";
+    private static final String PREVIOUS_LEVEL = "Good try \n We recommend you try again on an easier difficulty\n Use the new quiz button to start a new quiz on the previous difficultly";
     private boolean useNextDifficulty;
+    private boolean usePreviousDifficulty;
 
     private String topic;
     private String difficulty;
@@ -62,6 +64,12 @@ public class FinishQuizFragment extends Fragment {
                 } else {
                     bundle.putString(DIFFICULTY, activity.getString(R.string.hard));
                 }
+            } else if (usePreviousDifficulty) {
+                if (difficulty.equals(activity.getString(R.string.medium))) {
+                    bundle.putString(DIFFICULTY, activity.getString(R.string.easy));
+                } else {
+                    bundle.putString(DIFFICULTY, activity.getString(R.string.medium));
+                }
             }
             fragment.setArguments(bundle);
             activity.changeFragment(fragment);
@@ -77,6 +85,11 @@ public class FinishQuizFragment extends Fragment {
             if (score == 10 && (difficulty.equals(activity.getString(R.string.easy)) || difficulty.equals(activity.getString(R.string.medium)))) {
                 messageTextView.setText(NEXT_LEVEL);
                 useNextDifficulty = true;
+                scoreEntity = new Score(topic, TYPE, difficulty, score);
+                saveNewHighScore(scoreEntity);
+            } else if (score == 0 && (difficulty.equals(activity.getString(R.string.hard)) || difficulty.equals(activity.getString(R.string.medium)))) {
+                messageTextView.setText(PREVIOUS_LEVEL);
+                usePreviousDifficulty = true;
                 scoreEntity = new Score(topic, TYPE, difficulty, score);
                 saveNewHighScore(scoreEntity);
             } else if (scoreEntity == null || scoreEntity.score < score) {

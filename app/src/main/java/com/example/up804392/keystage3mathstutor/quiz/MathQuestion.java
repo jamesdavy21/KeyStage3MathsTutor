@@ -27,7 +27,7 @@ public class MathQuestion implements Question {
 
     @Override
     public String solveQuestion() {
-        return String.valueOf(solver.solve(values));
+        return  regex(solver.solve(values));
     }
 
     @Override
@@ -57,8 +57,8 @@ public class MathQuestion implements Question {
     }
 
     private String regex(String value) {
-        value = value.replaceAll("\\s+","");
-        value = value.replaceAll("\\s-0","0");
+        value = value.replaceAll("\\s+", "");
+        value = value.replaceAll("\\s-0", "0");
         value = value.replaceAll("\\.0$", "");
         return value;
     }

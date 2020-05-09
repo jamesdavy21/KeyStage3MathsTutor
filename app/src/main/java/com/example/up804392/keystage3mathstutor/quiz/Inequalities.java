@@ -12,7 +12,7 @@ import java.util.Random;
 public class Inequalities implements Quiz {
 
     private static final String QUESTION = "What values can x be to\n satisfy the following inequality:\n";
-    private static final String QUESTION_HARD = "What values can x be to\n satisfy the following inequalitys:\n";
+    private static final String QUESTION_HARD = "What values can x be to\n satisfy the following inequalities:\n";
     private Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
@@ -40,21 +40,6 @@ public class Inequalities implements Quiz {
                 break;
             }
             case MEDIUM: {
-//                switch (RANDOM.nextInt(3) + 1) {
-//                    case 1: {
-//                        question = createMediumQuestionUsingFormat1();
-//                        break;
-//                    }
-//                    case 2: {
-//                        question = createMediumQuestionUsingFormat2();
-//                        break;
-//                    }
-//                    default: {
-//                        question = createMediumQuestionUsingFormat3();
-//                        break;
-//                    }
-//                }
-//                break;
                 return Optional.empty();
             }
             case HARD: {

@@ -27,7 +27,7 @@
     <string name="correct">That is the correct answer</string>
     <string name="incorrect">That is the incorrect answer</string>
     <string name="highScore">New high score</string>
-    <string name="scoreboard">Scoreboard</string>
+    <string name="scoreboard">Personal\nScoreboard</string>
     <string name="guide_about">About</string>
     <string name="guide_example">Example questions</string>
     <string name="reveal_answer">reveal answer</string>

@@ -5,9 +5,9 @@ import java.util.Optional;
 public interface Question {
 
 
-    String solveQuestion();
+    <T> T solveQuestion();
 
-    Optional<String> getQuestion();
+    <T> Optional<T> getQuestion();
 
     <T> boolean isAnswerCorrect(T value);
 

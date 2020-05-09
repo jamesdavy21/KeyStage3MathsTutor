@@ -52,6 +52,10 @@ public class Expressions implements Quiz {
                 }
                 break;
             }
+            case HARD: {
+                question = createHardQuestionUsingFormat();
+                break;
+            }
             default: {
                 return Optional.empty();
             }
@@ -161,6 +165,21 @@ public class Expressions implements Quiz {
     }
 
     private MathQuestion createMediumQuestionUsingFormat3() {
+        return new MathQuestion(QUESTION + "%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
+            if (values.size() == 4) {
+                return String.valueOf(MathQuestion.round((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));
+            }
+            return "";
+        }, (format, values, operations) -> {
+            if (values.size() == 4 && operations.size() == 2) {
+                return Optional.of(String.format(format, values.get(0), operations.get(0), values.get(1), values.get(2), operations.get(1), values.get(3)));
+            }
+            return Optional.empty();
+        });
+    }
+
+
+    private MathQuestion createHardQuestionUsingFormat() {
         return new MathQuestion(QUESTION + "%.0fx%s%.0f=%.0f%s%.0fx", 4, 2, (values) -> {
             if (values.size() == 4) {
                 return String.valueOf(MathQuestion.round((values.get(2) - values.get(1)) / (values.get(0) - values.get(3))));

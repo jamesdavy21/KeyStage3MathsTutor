@@ -12,7 +12,7 @@ import java.util.Random;
 public class AlgebraicTerms implements Quiz {
 
     private static final String QUESTION = "Simplify the following:\n";
-    private static final Random RANDOM = new Random();
+    private Random RANDOM = new Random();
 
     public Optional<Question> createQuestion(QuestionDifficulty difficulty) {
         MathQuestion question;
